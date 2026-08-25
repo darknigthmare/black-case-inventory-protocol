@@ -55,6 +55,9 @@ Ce contrôle valide la syntaxe JavaScript, les 12 contrats, les modes campagne/a
 
 Le projet est prévu pour un hébergement statique. La configuration `vercel.json` force la revalidation du service worker afin que les nouvelles versions du jeu remplacent correctement l’ancien cache hors ligne.
 
+- Jeu en production : [black-case-inventory-protocol.vercel.app](https://black-case-inventory-protocol.vercel.app)
+- Dépôt public : [darknigthmare/black-case-inventory-protocol](https://github.com/darknigthmare/black-case-inventory-protocol)
+
 Les informations de provenance et les contrôles de reprise sont conservés dans [`CODEX_HANDOFF.md`](CODEX_HANDOFF.md).
 
 ## Propriété intellectuelle
