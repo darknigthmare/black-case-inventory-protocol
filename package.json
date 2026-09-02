@@ -1,10 +1,11 @@
 {
   "name": "black-case-inventory-protocol",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "node --check game.js && node scripts/verify.mjs",
-    "test": "npm run check"
+    "check": "node --check game-core.js && node --check game.js && node --check service-worker.js && node scripts/verify.mjs",
+    "test": "node --test tests/*.test.mjs && npm run check",
+    "build": "npm run check"
   }
 }

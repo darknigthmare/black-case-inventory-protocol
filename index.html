@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#111613" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="application-name" content="BLACK CASE" />
   <meta name="description" content="BLACK CASE — jeu original de rangement tactique de mallette et de coffre." />
   <title>BLACK CASE — Inventory Protocol</title>
   <link rel="manifest" href="manifest.webmanifest" />
@@ -11,7 +13,8 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div id="app" class="app" aria-live="polite">
+  <a class="skip-link" href="#gameMain">Aller directement au jeu</a>
+  <div id="app" class="app">
     <div class="noise" aria-hidden="true"></div>
 
     <header class="topbar">
@@ -30,12 +33,13 @@
 
       <div class="top-actions">
         <button id="helpButton" class="icon-button" type="button" aria-label="Afficher l’aide" title="Aide">?</button>
-        <button id="soundButton" class="icon-button" type="button" aria-label="Activer ou couper le son" title="Son">♪</button>
+        <button id="soundButton" class="icon-button" type="button" aria-label="Couper le son" aria-pressed="true" title="Couper le son">♪</button>
         <button id="fullscreenButton" class="icon-button" type="button" aria-label="Plein écran" title="Plein écran">⛶</button>
       </div>
+      <div id="connectionStatus" class="connection-status" role="status" hidden></div>
     </header>
 
-    <main class="game-shell">
+    <main id="gameMain" class="game-shell" tabindex="-1">
       <section class="hud-panel status-panel" aria-label="Informations de mission">
         <div class="hud-row">
           <div>
@@ -54,16 +58,17 @@
         <div class="objective-box">
           <span class="eyebrow">OBJECTIF</span>
           <p id="objectiveText">Transférez tout le matériel utile dans la mallette.</p>
-          <div class="objective-progress" aria-hidden="true">
+          <div class="objective-progress" role="progressbar" aria-label="Progression des conditions du contrat" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
             <span id="objectiveProgress"></span>
           </div>
+          <ul id="objectiveChecklist" class="objective-checklist" aria-label="Conditions du contrat"></ul>
         </div>
         <div class="health-box">
           <div class="health-label">
             <span>ÉTAT OPÉRATEUR</span>
             <strong id="healthValue">100%</strong>
           </div>
-          <div class="health-track" aria-label="Santé de l’opérateur">
+          <div class="health-track" role="progressbar" aria-label="Santé de l’opérateur" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
             <span id="healthBar"></span>
           </div>
         </div>
@@ -84,7 +89,7 @@
           <div class="case-frame">
             <div class="case-hinge hinge-left" aria-hidden="true"></div>
             <div class="case-hinge hinge-right" aria-hidden="true"></div>
-            <div id="caseBoard" class="board case-board" data-board="case" role="grid" aria-label="Grille de la mallette"></div>
+            <div id="caseBoard" class="board case-board" data-board="case" role="group" aria-label="Objets de la mallette"></div>
           </div>
           <footer class="module-footer">
             <span><kbd>R</kbd> pivoter</span>
@@ -105,7 +110,7 @@
             </div>
           </header>
           <div class="storage-frame">
-            <div id="storageBoard" class="board storage-board" data-board="storage" role="grid" aria-label="Grille du coffre de stockage"></div>
+            <div id="storageBoard" class="board storage-board" data-board="storage" role="group" aria-label="Objets du coffre de stockage"></div>
           </div>
           <footer class="module-footer storage-footer">
             <span>Déposez ici le matériel non retenu.</span>
@@ -135,36 +140,36 @@
               <div><dt>Position</dt><dd id="inspectorPosition">—</dd></div>
             </dl>
             <div class="inspector-actions">
-              <button id="rotateButton" class="action-button" type="button"><span>↻</span> Pivoter</button>
-              <button id="transferButton" class="action-button" type="button"><span>⇄</span> Transférer</button>
-              <button id="specialButton" class="action-button accent" type="button" hidden><span>＋</span> Action</button>
+              <button id="rotateButton" class="action-button" type="button"><span aria-hidden="true">↻</span> Pivoter</button>
+              <button id="transferButton" class="action-button" type="button"><span aria-hidden="true">⇄</span> Transférer</button>
+              <button id="specialButton" class="action-button accent" type="button" hidden><span aria-hidden="true">＋</span> Action</button>
             </div>
           </div>
         </aside>
       </section>
 
       <section class="command-bar" aria-label="Commandes générales">
-        <button id="contractsButton" class="command-button" type="button"><span>☷</span><strong>Contrats</strong><small>Choisir un niveau</small></button>
-        <button id="undoButton" class="command-button" type="button"><span>↶</span><strong>Annuler</strong><small>Dernière action</small></button>
-        <button id="autoSortButton" class="command-button" type="button"><span>▦</span><strong>Auto-ranger</strong><small>Mallette uniquement</small></button>
-        <button id="resetButton" class="command-button" type="button"><span>⟲</span><strong>Réinitialiser</strong><small>Recommencer</small></button>
-        <button id="validateButton" class="command-button primary" type="button"><span>✓</span><strong>Valider</strong><small>Contrôler le chargement</small></button>
+        <button id="contractsButton" class="command-button" type="button"><span aria-hidden="true">☷</span><strong>Contrats</strong><small>Choisir un niveau</small></button>
+        <button id="undoButton" class="command-button" type="button"><span aria-hidden="true">↶</span><strong>Annuler</strong><small>Dernière action</small></button>
+        <button id="autoSortButton" class="command-button" type="button"><span aria-hidden="true">▦</span><strong>Auto-ranger</strong><small>Mallette uniquement</small></button>
+        <button id="resetButton" class="command-button" type="button"><span aria-hidden="true">⟲</span><strong>Réinitialiser</strong><small>Recommencer</small></button>
+        <button id="validateButton" class="command-button primary" type="button"><span aria-hidden="true">✓</span><strong>Valider</strong><small>Contrôler le chargement</small></button>
       </section>
     </main>
 
-    <section id="startScreen" class="overlay start-screen" aria-label="Menu principal">
+    <section id="startScreen" class="overlay start-screen" role="dialog" aria-modal="true" aria-labelledby="startTitle" tabindex="-1">
       <div class="start-card">
         <div class="title-lockup">
           <span class="logo-grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
           <div>
             <span class="eyebrow">TACTICAL PACKING GAME</span>
-            <h1>BLACK CASE</h1>
+            <h1 id="startTitle">BLACK CASE</h1>
             <p>INVENTORY PROTOCOL</p>
           </div>
         </div>
         <p class="start-copy">Chaque case compte. Faites pivoter, chargez, combinez et rangez votre équipement avant l’extraction.</p>
         <div class="menu-actions">
-          <button id="newCampaignButton" class="menu-button primary" type="button"><strong>Nouvelle campagne</strong><span>Commencer au protocole 01</span></button>
+          <button id="newCampaignButton" class="menu-button primary" type="button"><strong>Recommencer la campagne</strong><span>Protocole 01, records conservés</span></button>
           <button id="continueButton" class="menu-button" type="button"><strong>Continuer</strong><span id="continueLabel">Aucune progression</span></button>
           <button id="randomButton" class="menu-button" type="button"><strong>Contrat aléatoire</strong><span>Nouvelle cargaison à chaque partie</span></button>
           <button id="sandboxButton" class="menu-button" type="button"><strong>Bac à sable</strong><span>Grande mallette, aucune pression</span></button>
@@ -176,20 +181,20 @@
       </div>
     </section>
 
-    <section id="contractsOverlay" class="overlay modal-overlay" hidden aria-label="Sélection des contrats">
+    <section id="contractsOverlay" class="overlay modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="contractsTitle" tabindex="-1">
       <div class="modal-card contracts-card">
         <header class="modal-header">
-          <div><span class="eyebrow">CAMPAGNE</span><h2>SÉLECTION DU CONTRAT</h2></div>
+          <div><span class="eyebrow">CAMPAGNE</span><h2 id="contractsTitle">SÉLECTION DU CONTRAT</h2></div>
           <button class="close-button" data-close="contractsOverlay" type="button" aria-label="Fermer">×</button>
         </header>
         <div id="contractsGrid" class="contracts-grid"></div>
       </div>
     </section>
 
-    <section id="helpOverlay" class="overlay modal-overlay" hidden aria-label="Aide">
+    <section id="helpOverlay" class="overlay modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="helpTitle" tabindex="-1">
       <div class="modal-card help-card">
         <header class="modal-header">
-          <div><span class="eyebrow">MANUEL TERRAIN</span><h2>COMMANDES & RÈGLES</h2></div>
+          <div><span class="eyebrow">MANUEL TERRAIN</span><h2 id="helpTitle">COMMANDES & RÈGLES</h2></div>
           <button class="close-button" data-close="helpOverlay" type="button" aria-label="Fermer">×</button>
         </header>
         <div class="help-grid">
@@ -199,11 +204,13 @@
           <article><strong>Optimiser</strong><p>Chargez les munitions, utilisez les soins et combinez certains composants afin de libérer de la place.</p></article>
           <article><strong>Valider</strong><p>Le contrat est terminé lorsque le coffre est vide et que les conditions particulières sont respectées.</p></article>
           <article><strong>Mobile</strong><p>Touchez un objet pour le sélectionner, glissez-le pour le déplacer et utilisez les commandes de l’inspecteur.</p></article>
+          <article><strong>Score & rang</strong><p>Le temps est comparé au par du contrat. Les déplacements, rotations, ressources gaspillées et l’auto-rangement réduisent le score.</p></article>
+          <article><strong>Sauvegarde</strong><p>La partie active, la santé, les objets et leurs positions sont enregistrés localement après chaque action et à la fermeture.</p></article>
         </div>
       </div>
     </section>
 
-    <section id="resultOverlay" class="overlay modal-overlay" hidden aria-label="Résultat du contrat">
+    <section id="resultOverlay" class="overlay modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="resultTitle" tabindex="-1">
       <div class="modal-card result-card">
         <div id="resultSeal" class="result-seal">S</div>
         <span class="eyebrow">CONTRAT VALIDÉ</span>
@@ -222,11 +229,12 @@
       </div>
     </section>
 
-    <div id="toast" class="toast" role="status" aria-live="assertive"></div>
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
     <div id="dragGhost" class="drag-ghost" hidden aria-hidden="true"></div>
     <div id="placementPreview" class="placement-preview" hidden aria-hidden="true"></div>
   </div>
 
+  <script src="game-core.js"></script>
   <script src="game.js"></script>
 </body>
 </html>

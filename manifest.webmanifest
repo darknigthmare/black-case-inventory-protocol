@@ -1,12 +1,17 @@
 {
+  "id": "./",
   "name": "BLACK CASE — Inventory Protocol",
   "short_name": "BLACK CASE",
-  "start_url": "./index.html",
+  "description": "Jeu original de rangement tactique de mallette, jouable hors ligne.",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#0b0f0d",
   "theme_color": "#111613",
   "lang": "fr",
+  "orientation": "any",
+  "categories": ["games", "entertainment"],
   "icons": [
-    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
   ]
 }

@@ -1,6 +1,6 @@
 # BLACK CASE — Inventory Protocol
 
-Mini-jeu original de rangement tactique inspiré du principe de « mallette à grille » des survival-horror : déplacer, faire pivoter, charger, combiner et organiser des objets dans un espace limité.
+Jeu original de rangement tactique inspiré du principe de « mallette à grille » des survival-horror : déplacer, faire pivoter, charger, combiner et organiser des objets dans un espace limité au fil d’une campagne complète.
 
 ## Lancer le jeu
 
@@ -21,23 +21,24 @@ Puis ouvrir `http://localhost:8080`.
 ## Commandes
 
 - Souris / tactile : glisser-déposer les objets.
-- `R` : faire pivoter l’objet sélectionné ou l’objet actuellement déplacé.
-- Flèches : déplacer l’objet sélectionné d’une case.
-- `Espace` : transférer automatiquement entre coffre et mallette.
-- `Entrée` : utiliser l’action contextuelle disponible.
-- `Tab` / `Maj+Tab` : parcourir les objets.
+- `Tab` / `Maj+Tab` : suivre le parcours de focus standard de l’interface.
+- Sur un objet focalisé, `R` le fait pivoter et les flèches le déplacent d’une case.
+- Sur un objet focalisé, `Espace` le transfère automatiquement entre coffre et mallette.
+- Sur un objet focalisé, `Entrée` utilise l’action contextuelle disponible.
 - Double-clic ou clic droit : pivoter.
 
 ## Contenu
 
 - 12 contrats de campagne progressifs.
-- Contrats aléatoires.
+- Contrats aléatoires cohérents et reproductibles grâce à leur graine affichée.
 - Bac à sable.
 - Deux grilles : mallette et coffre de stockage.
-- Rotation à 90°, collision et verrouillage sur grille.
+- Rotation à 90°, limites, collisions et superpositions contrôlées par un noyau déterministe testé.
 - Chargement des armes, consommation de soins, combinaison de plantes et montage d’accessoires.
-- Annulation, réinitialisation, rangement automatique, score, rang et sauvegarde locale.
-- Interface responsive compatible souris, clavier et tactile.
+- Annulation complète, réinitialisation confirmée, rangement automatique borné, score versionné et rang.
+- Sauvegarde locale exacte de la partie active : positions, rotation, santé, temps, compteurs, sélection et historique d’annulation.
+- Progression de campagne non régressive, records par contrat et état de campagne terminée.
+- Interface responsive compatible souris, clavier et tactile, avec dialogues modaux, focus restauré et objectifs détaillés.
 - Sons procéduraux sans ressource externe.
 - Fonctionnement hors ligne et manifeste PWA.
 
@@ -47,9 +48,10 @@ Le projet ne nécessite aucune dépendance d’exécution. Avec Node.js install�
 
 ```bash
 npm test
+npm run build
 ```
 
-Ce contrôle valide la syntaxe JavaScript, les 12 contrats, les modes campagne/aléatoire/bac à sable, les fichiers du shell PWA et la protection contre le gel du générateur aléatoire.
+Ces contrôles valident la syntaxe JavaScript, le noyau de placement, les rotations, limites, collisions, superpositions, le solveur, les 12 contrats, les trois modes, la sauvegarde V2 et le shell PWA. La release est ensuite contrôlée dans un vrai navigateur sur desktop et mobile, y compris hors ligne.
 
 ## Publication
 
